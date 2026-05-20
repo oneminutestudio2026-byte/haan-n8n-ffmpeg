@@ -1,4 +1,17 @@
-FROM n8nio/n8n:latest
-USER root
-RUN apt-get update && apt-get install -y ffmpeg && rm -rf /var/lib/apt/lists/*
+FROM node:20-alpine
+
+# Install ffmpeg and required tools
+RUN apk add --no-cache ffmpeg tzdata
+
+# Install n8n globally
+RUN npm install -g n8n
+
 USER node
+
+WORKDIR /home/node
+
+EXPOSE 5678
+
+ENV N8N_USER_FOLDER=/home/node/.n8n
+
+CMD ["n8n", "start"]
